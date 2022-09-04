@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import logo from './logo.svg'
+import './App.css'
+import { IProduct } from './App.models'
+import { Product } from './Product'
+import { PurchaseDisplay } from './PurchaseDisplay'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const initialProducts: IProduct[] = [
+        { name: 'keyboard', image: './images/image001.png', price: 200 },
+        {
+            name: 'headphones',
+            image: './images/image002.png',
+            price: 300
+        },
+        {
+            name: 'mouse',
+            image: './images/image003.png',
+            price: 100
+        }
+    ]
+
+    const [isProductBought, setIsProductBought] = useState(false)
+    const [productBought, setProductBought] = useState({ name: '', image: '', price: 0 })
+
+    const handlePurchase = (product: IProduct) => {
+        setProductBought(product)
+        setIsProductBought(true)
+    }
+
+    const [products, setProducts] = useState(initialProducts)
+
+    return (
+        <>
+            <h1 className='Tiny-store'>Tiny Store</h1>
+            {isProductBought ? (
+                <PurchaseDisplay  productPurchased={productBought} />
+            ) : (
+                <div className={'App-container'}>
+                    {products.map((product) => {
+                        return <Product product={product} onBuy={handlePurchase} />
+                    })}
+                </div>
+            )}
+        </>
+    )
 }
 
-export default App;
+export default App
