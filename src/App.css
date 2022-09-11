@@ -41,6 +41,13 @@
   outline: solid 3px black;
   border-radius: 10px;
   padding: 5px;
+
+}
+
+.Image-item {
+  display:flex; 
+  flex-direction: horizontal;
+  justify-content: center;
 }
 
 .Product-name-container {

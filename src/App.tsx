@@ -4,6 +4,7 @@ import './App.css'
 import { IProduct } from './App.models'
 import { Product } from './Product'
 import { PurchaseDisplay } from './PurchaseDisplay'
+import { setPriority } from 'os'
 
 const App = () => {
     const initialProducts: IProduct[] = [
@@ -28,6 +29,42 @@ const App = () => {
         setIsProductBought(true)
     }
 
+    const handleUpdate = (product: IProduct, index: number) => {
+
+        const productToUpdate = {name: 'CPU', 
+                             image: './images/image008.png',
+                              price: 350} as IProduct
+
+        // *** This mutates the array of products so don't use it ****
+        //  products[index] = productToUpdate
+        //  setProducts(products)
+        // *******************************
+
+        // here is the correct way to do an update to products, by creating a 
+        // new products array containing the update:'
+
+       const newProducts = products.map((nextProduct, productIndex) => {
+            if (productIndex === index)
+             {
+                return productToUpdate
+             }
+
+             return nextProduct
+        })
+
+        // set the products state to the newly referenced array
+        setProducts(newProducts)
+    }
+
+    const handleRemove = (product: IProduct, index: number) => {
+       const filteredProducts = products.filter(
+            (nextProduct, productIndex) =>
+                productIndex != index)
+
+    setProducts(filteredProducts)
+    }
+
+
     const [products, setProducts] = useState(initialProducts)
 
     return (
@@ -37,8 +74,13 @@ const App = () => {
                 <PurchaseDisplay  productPurchased={productBought} />
             ) : (
                 <div className={'App-container'}>
-                    {products.map((product) => {
-                        return <Product product={product} onBuy={handlePurchase} />
+                    {products.map((product, index) => {
+                        return <Product 
+                        product={product} 
+                        productIndex={index} 
+                        onBuy={handlePurchase} 
+                        onUpdate={handleUpdate}
+                        onRemove={handleRemove}  />
                     })}
                 </div>
             )}
